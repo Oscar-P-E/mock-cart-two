@@ -1,12 +1,9 @@
+import { useMemo } from "react";
 import { cartType } from "../cart-items";
 import { useCart } from "../cartContext";
 
 export const Cart = () => {
     const { cart } = useCart();
-
-    if (cart.length === 0) {
-        return <div className="text-center">Your cart is empty</div>;
-    }
 
     const clearCart = () => {
         localStorage.removeItem("cart");
@@ -31,6 +28,14 @@ export const Cart = () => {
         };
     };
 
+    const totalPrice = useMemo(() => {
+        return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    }, [cart]);
+
+    if (cart.length === 0) {
+        return <div className="text-center">Your cart is empty</div>;
+    }
+
 
 return (
   <div className="grid grid-cols-3">
@@ -52,20 +57,18 @@ return (
     </ul>
     </div>
     <div className="">
-        <div className="bg-white p-4 shadow rounded">
-            <h2 className="font-bold text-xl mb-2">Total</h2>
+        <div className="bg-white p-4 shadow rounded flex gap-1 flex-col">
+            <h2 className="font-bold text-xl mb-2">Summary</h2>
             <div className="font-bold mb-2">Items: {cart.length}</div>
-            <div className="font-bold mb-2">Total: ${cart.reduce((total, item) => total + item.price * item.quantity, 0)
-            .toFixed(2)}</div>
-
+            <div className="font-bold mb-2">Total: ${totalPrice}</div>
+            <div className="gap-1 flex">
             <button onClick={checkout(cart)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Checkout
             </button>
-
             <button onClick={clearCart} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Clear Cart
             </button>
-
+            </div>
     </div>
   </div>
   </div>
