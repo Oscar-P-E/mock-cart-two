@@ -1,17 +1,23 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { Home } from "./pages/Home"
-import { NotFound } from "./pages/NotFound"
-import { Shop } from "./pages/Shop"
-import { Cart } from "./pages/Cart"
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Index } from "./routes/index";
+import { Root } from "./routes/root";
+import { NotFound } from "./not-found";
+import { Shop } from "./routes/shop";
+import { Cart } from "./routes/cart";
 
 export const Router = () => {
-    const router = createBrowserRouter([
-        { path: "/", element: <Home />, errorElement: <NotFound /> },
-        { path: "/shop", element: <Shop />, errorElement: <NotFound /> },
-        { path: "/cart", element: <Cart />, errorElement: <NotFound /> },
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Index /> },
+        { path: "/shop", element: <Shop /> },
+        { path: "/cart", element: <Cart /> },
+      ],
+    },
+  ]);
 
-    ])
-
-return <RouterProvider router={router} />
-}
+  return <RouterProvider router={router} />;
+};
